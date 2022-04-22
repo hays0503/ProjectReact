@@ -2,37 +2,87 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  background-color: #17181d;
+  min-height: 10vh;
+  font-size: 2vmin;
   color: white;
+
+  display: flex;
+  justify-content: space-around;
+  flex-flow: row wrap;
+  align-items: stretch;
+}
+.App-header .CreatePostButton{
+  flex-grow: 1;
+  margin: auto;
+  margin-left: 2vmin;
+  background: #3498db;
+  border-radius: 60px;
+  box-shadow: -2px 4px 3px #666666;
+  font-family: Arial;
+  color: #000000;
+  font-size: 10px;
+  padding: 6px 4px 8px 7px;
+  text-decoration: none;
+}
+.App-header .CreatePostButton:hover {
+  background: #3cb0fd;
+  text-decoration: none;
+}
+
+.App-header .FilterPostButton{
+  flex-grow: 1;
+  margin: auto;
+  margin-right: 2vmin;
+  background: #3498db;
+  border-radius: 60px;
+  box-shadow: -2px 4px 3px #666666;
+  font-family: Arial;
+  color: #000000;
+  font-size: 10px;
+  padding: 6px 4px 8px 7px;
+  text-decoration: none;
+}
+.App-header .FilterPostButton:hover {
+  background: #3cb0fd;
+  text-decoration: none;
+}
+
+.App-header h1{
+  flex-grow: 25;
 }
 
 .App-link {
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.Posts{
+  margin-top: 1%;
+  margin-left: 15%;
+  margin-right: 15%;
+  align-items: center;
+  justify-content: center;
 }
+.Post{
+  margin-top: 2%;
+  -webkit-box-shadow: -20px 20px 21px -12px rgba(34, 60, 80, 0.69);
+  -moz-box-shadow: -20px 20px 21px -12px rgba(34, 60, 80, 0.69);
+  box-shadow: -20px 20px 21px -12px rgba(34, 60, 80, 0.69);
+  min-height: 10vh;
+  background-color: #a7a7a7;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  text-align: left;
+}
+.Post .time{
+  align-items: flex-end;
+  text-align: right;
+}
+.PostBody{
+  margin: 2%;
+}
+
+
