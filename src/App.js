@@ -1,5 +1,5 @@
 import "./App.css";
-import PostList, {getPostItems} from "./Posts/PostList";
+import PostList from "./Posts/PostList";
 import Modal from "./Modal/Modal";
 import ModalCreateWindows from "./Modal/ModalCreateWindows";
 import React from "react";
@@ -60,12 +60,6 @@ function App() {
     }
 
     function editPost(title, text, id) {
-        const search = obj => obj.idItem === id;
-        let index = Items.findIndex(search)
-        console.log(index)
-        console.log(Items.at(index))
-        console.log("Items Before  ", Items)
-        console.log(text, " ", title)
         setItems(
             Items.map((Item) =>
                 // Here you accept a id argument to the function and replace it with hard coded 🤪 2, to make it dynamic.
@@ -74,7 +68,6 @@ function App() {
                     : {...Item}
             )
         );
-        console.log("Items After  ", Items)
 
     }
 
@@ -85,16 +78,12 @@ function App() {
             PostText: text,
             Datatime: new Date()
         }
-        console.log(Item)
         setItems(Items => [...Items, Item]);
-        console.log("Items After  ", Items)
 
     }
 
     function filterItem(title) {
         setItems(Items.filter((item) => item.Title.toLowerCase().includes(title.toLowerCase())));
-        console.log("filterTitle", title);
-        console.log("filterItem", Items);
     }
 
 
@@ -105,12 +94,10 @@ function App() {
             }))
             setStateSort(true);
         }
-        console.log("filterItem", Items);
+
 
     }
 
-    console.log("items", Items);
-    console.log("currentItem", currentItem);
 
     const postsElementRef = React.useRef(null);
 
