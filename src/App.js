@@ -59,6 +59,7 @@ function App() {
         setCurrentItem(null);
     }
 
+
     function editPost(title, text, id) {
         setItems(
             Items.map((Item) =>
