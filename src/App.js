@@ -2,8 +2,9 @@ import "./App.css";
 import PostList from "./Posts/PostList";
 import Modal from "./Modal/Modal";
 import ModalCreateWindows from "./Modal/ModalCreateWindows";
-import React from "react";
 import Context from "./context";
+import React from "react";
+import {Link, Route, Routes, useNavigate} from 'react-router-dom';
 
 function App() {
     const [Items, setItems] = React.useState([
@@ -47,6 +48,9 @@ function App() {
     const [modalActiveCreator, setModalActiveCreator] = React.useState(false);
     const [currentItem, setCurrentItem] = React.useState(null);
     const [stateSort, setStateSort] = React.useState(false);
+    const refFilter = React.createRef();
+
+    const navigate = useNavigate();
 
     function clickOnPost(item) {
         setModalActiveEditor(true);
@@ -57,6 +61,7 @@ function App() {
         setItems(Items.filter((item) => item.idItem !== id));
         setModalActiveEditor();
         setCurrentItem(null);
+        navigate(-1)
     }
 
 
@@ -72,6 +77,11 @@ function App() {
 
     }
 
+
+    function quitPost() {
+        navigate(-1)
+    }
+
     function addPost(title, text) {
         let Item = {
             idItem: Items.length,
@@ -79,7 +89,10 @@ function App() {
             PostText: text,
             Datatime: new Date()
         }
+
         setItems(Items => [...Items, Item]);
+        navigate(-1)
+        console.log(Item)
 
     }
 
@@ -89,7 +102,7 @@ function App() {
 
 
     function sortItem(directionByData) {
-        if (!directionByData){
+        if (!directionByData) {
             setItems(Items.sort(function (a, b) {
                 return new Date(b.Datatime) - new Date(a.Datatime);
             }))
@@ -100,25 +113,26 @@ function App() {
     }
 
 
-    const postsElementRef = React.useRef(null);
-
-    const refFilter = React.createRef();
 
 
-    return (
-        <Context.Provider value={{removePost, clickOnPost, currentItem}}>
+    function Layout() {
+        return (
             <div className="App">
                 <div className="App-header">
-                    <button
-                        className="CreatePostButton"
-                        onClick={() => setModalActiveCreator(true)}
-                    >
-                        Добавление нового поста
-                    </button>
+                    <Link to="/newpost">
+                        <br/>
+                        <button
+                            className="CreatePostButton"
+                            onClick={() => setModalActiveCreator(true)}
+                        >
+                            Добавление нового поста
+                        </button>
+                    </Link>
                     <h1>Одностраничное приложение React + Redux</h1>
                     <div className="FilterArea">
                         <input ref={refFilter} type="text"/>
-                        <button className="FilterPostButton" onClick={() => filterItem(refFilter.current.value)}>
+                        <button className="FilterPostButton"
+                                onClick={() => filterItem(refFilter.current.value)}>
                             Фильтрация по заголовкам
                         </button>
                         <br/>
@@ -127,25 +141,46 @@ function App() {
                         </button>
                     </div>
                 </div>
-                <PostList Items={Items} ref={postsElementRef}/>
 
-                <Modal
-                    active={modalActiveEditor}
-                    setActive={setModalActiveEditor}
-                    item={currentItem}
-                    editPost={editPost}
-                    removePost={removePost}
-                    clickOnPost={clickOnPost}
-                />
-                <ModalCreateWindows
-                    active={modalActiveCreator}
-                    setActive={setModalActiveCreator}
-                    item={currentItem}
-                    addPost={addPost}
-                />
+                <PostList Items={Items}/>
+
+
             </div>
+        );
+    }
+
+    function NewPost() {
+        return <ModalCreateWindows
+                active={modalActiveCreator}
+                setActive={setModalActiveCreator}
+                item={currentItem}
+                addPost={addPost}
+                />
+    }
+
+    function Post() {
+        return <Modal
+                active={modalActiveEditor}
+                setActive={setModalActiveEditor}
+                item={currentItem}
+                editPost={editPost}
+                removePost={removePost}
+                clickOnPost={clickOnPost}
+        />
+    }
+
+    return (
+        <Context.Provider value={{removePost, clickOnPost, currentItem,quitPost}}>
+            <Routes>
+                <Route path='/' element={Layout()}/>
+                <Route path='/newpost' element={NewPost()}/>
+                <Route path='/post' element={Post()}/>
+            </Routes>
         </Context.Provider>
-    );
+    )
+        ;
 }
 
 export default App;
+
+
