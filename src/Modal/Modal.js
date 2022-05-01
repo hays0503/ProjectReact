@@ -4,6 +4,10 @@ import imgDeleteStatic from "./del.png";
 import imgEditStatic from "./edit.png"
 import imgBackStatic from "./back.png"
 import Context from "../context";
+import {bindActionCreators} from "redux";
+import {editPost, removePost} from "../redux/actions";
+import {connect} from "react-redux";
+
 
 const style = {
     buttonDelete: {
@@ -25,19 +29,36 @@ const style = {
 
 
 const Modal = (props) => {
-    const {active,item, editPost} = props;
-    const {removePost, currentItem,quitPost} = useContext(Context);
+    const {active,idClickPost,postItem,removePost,editPost} = props;
+    const {quitPost} = useContext(Context);
 
     let [stateContentEditable, setStateContentEditable] = React.useState(false)
 
     function toggleEditable(props) {
-        props.stopPropagation()
-        setStateContentEditable(true)
-        const postTitle = document.getElementById("Title")
-        const postText = document.getElementById("PostText")
-        console.log(postTitle)
-        console.log(postText)
-        editPost(postTitle.innerText, postText.innerText, currentItem?.idItem)
+        if(stateContentEditable){
+            const postTitle = document.getElementById("Title").innerText
+            const postText = document.getElementById("PostText").innerText
+            editPost(
+                {
+                    id: postItem.at(idClickPost).idItem,
+                    idItem: postItem.at(idClickPost).idItem,
+                    titlePost: postTitle,
+                    contentPost: postText,
+                    data: new Date()
+                })
+            setStateContentEditable(false)
+        }else {
+            props.stopPropagation()
+            setStateContentEditable(true)
+        }
+
+    }
+
+    function deletePost() {
+        if(props.postItem.length>0){
+            removePost(postItem.at(idClickPost).idItem)
+            quitPost()
+        }
     }
 
     return (
@@ -46,20 +67,20 @@ const Modal = (props) => {
                 className={active ? "Modal active" : "Modal"}
                 onClick={(e) => e.stopPropagation()}
             >
-                <h1>{item?.idItem}</h1>
+                <h1>{postItem?.at(idClickPost)?.idItem}</h1>
                 <div className="ModalContent" onClick={(e) => e.stopPropagation()}>
                     <div className="EditableContent" contentEditable={stateContentEditable}>
                         <div className="Post">
                             <div className="PostBody">
-                                <h3 id="Title">{item?.Title}</h3>
-                                <p id="PostText">{item?.PostText}</p>
+                                <h3 id="Title">{postItem?.at(idClickPost)?.titlePost}</h3>
+                                <p id="PostText">{postItem?.at(idClickPost)?.contentPost}</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 <button
                     style={style.buttonDelete}
-                    onClick={() => removePost(currentItem?.idItem)}
+                    onClick={() => deletePost()}
                 >
                     <img src={imgDeleteStatic} alt={"Удаление поста"}/>
                 </button>
@@ -80,4 +101,20 @@ const Modal = (props) => {
     );
 };
 
-export default Modal;
+const putStateToProps = (state) => {
+    return {
+        idClickPost: state.posts.idClickPost,
+        postItem:  state.posts.postItem
+    }
+};
+
+
+const putActionsToProps = (dispatch) => {
+    return {
+        editPost:   bindActionCreators(editPost, dispatch),
+        removePost: bindActionCreators(removePost, dispatch),
+    }
+};
+
+export  default connect(putStateToProps, putActionsToProps)(Modal)
+

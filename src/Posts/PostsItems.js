@@ -1,8 +1,11 @@
-import React, {useContext} from "react";
-import Context from "../context";
+import React from "react";
 import {Link} from "react-router-dom";
+import {bindActionCreators} from "redux";
+import {clickOnThePost} from "../redux/actions";
+import {connect} from "react-redux";
 
-var options = {
+
+const options = {
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -11,22 +14,36 @@ var options = {
     second: "numeric",
 };
 
-export default function PostsItems({todo}) {
-    const {clickOnPost} = useContext(Context);
+const PostsItems = (props) => {
 
-    function click(todo) {
-        clickOnPost(todo);
-    }
+    const {clickOnThePost,postItem,todo} = props
+
+    const search = obj => obj.idItem === todo.idItem;
 
     return (
-        <div className="Post" onClick={() => click(todo)}>
+        <div className="Post" onClick={() => clickOnThePost(postItem.findIndex(search))}>
             <Link to="/post">
                 <div className="PostBody">
-                    <h3>{todo.Title}</h3>
-                    <p>{todo.PostText}</p>
-                    <p>Дата создание {todo.Datatime.toLocaleString("ru", options)}</p>
+                    <h3>{todo?.titlePost}</h3>
+                    <p>{todo?.contentPost}</p>
+                    <p>Дата создание {todo?.data.toLocaleString("ru", options)}</p>
+                    <p>{todo?.idItem}</p>
                 </div>
             </Link>
         </div>
     );
 }
+
+const putStateToProps = (state) => {
+    return {
+        postItem:  state.posts.postItem
+    }
+};
+
+const putActionsToProps = (dispatch) => {
+    return {
+        clickOnThePost:   bindActionCreators(clickOnThePost, dispatch),
+    }
+};
+
+export default connect(putStateToProps, putActionsToProps)(PostsItems)

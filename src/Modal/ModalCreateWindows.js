@@ -2,7 +2,12 @@ import React, {useContext} from "react";
 import "./Modal.css";
 import Context from "../context";
 import imgBackStatic from "./back.png";
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
+import {addNewPost, changeIdPost, changeTextPost, changeTitlePost} from "../redux/actions";
+import {uid} from "uid";
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const style = {
     buttonQuit: {
         marginBlockEnd: "290px",
@@ -11,19 +16,12 @@ const style = {
     }
 };
 
-
 const ModalCreateWindows = (props) => {
-    const {active, addPost} = props;
+    let {textPost,titleText,
+        changeTitlePost, changeTextPost, addNewPost } = props
+
+    const {active} = props;
     const {quitPost} = useContext(Context);
-
-    let refTitle = React.createRef();
-    let refText = React.createRef();
-
-
-    function addPostItem(props) {
-        props.stopPropagation()
-        addPost(refTitle.current.value, refText.current.value)
-    }
 
     return (
         <div
@@ -35,16 +33,30 @@ const ModalCreateWindows = (props) => {
                     <div className="PostBody">
                         <label>
                             Title: <br/>
-                            <input ref={refTitle} type="text"/>
+                            <input
+                                type="text"
+                                value={titleText}
+                                onChange={(event) => {
+                                    changeTitlePost(event.target.value)
+                                }}/>
                             <br/>
                             PostText: <br/>
-                            <textarea ref={refText} type="text" cols="40" rows="3"/>
+                            <textarea value={textPost} type="text" cols="40" rows="3"
+                                      onChange={(event) => {
+                                          changeTextPost(event.target.value)
+                                      }}/>
                         </label>
-                        <button
-                                onClick={(e) => addPostItem(e)}
-                            >
+                        <button onClick={()=> {addNewPost(
+                            {
+                                id: uid(),
+                                idItem: uid(),
+                                titlePost: titleText,
+                                contentPost: textPost,
+                                data: new Date()
+                            })}}>
                             Добавить пост
                         </button>
+
 
 
                     </div>
@@ -60,4 +72,23 @@ const ModalCreateWindows = (props) => {
     );
 };
 
-export default ModalCreateWindows;
+const putStateToProps = (state) => {
+    return {
+        textPost: state.posts.textPost,
+        titleText: state.posts.titleText,
+        postItem:  state.posts.postItem
+    }
+};
+
+
+const putActionsToProps = (dispatch) => {
+    return {
+        changeTextPost: bindActionCreators(changeTextPost, dispatch),
+        changeTitlePost: bindActionCreators(changeTitlePost, dispatch),
+        changeIdPost: bindActionCreators(changeIdPost, dispatch),
+        addNewPost:   bindActionCreators(addNewPost, dispatch),
+    }
+};
+
+export  default connect(putStateToProps, putActionsToProps)(ModalCreateWindows)
+

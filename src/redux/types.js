@@ -1,4 +1,10 @@
-export const CREATE_POST = 'POST/CREATE_POST' //Создание поста
-export const FETCH_POSTS = 'POST/FETCH_POSTS' // Получение поста из бд
-export const DELETE_POSTS = 'POST/DELETE_POSTS' // Удалить пост
-export const EDIT_POSTS = 'POST/EDIT_POSTS' // Редактировать пост
+export const ACTION_CHANGE_TITLE_POST = "ACTION_CHANGE_TITLE_POST"
+export const ACTION_CHANGE_TEXT_POST = "ACTION_CHANGE_TEXT_POST"
+export const ACTION_ADD_POST = "ACTION_ADD_POST"
+export const ACTION_REMOVE_POST = "ACTION_REMOVE_POST"
+export const ACTION_CHANGE_ID_INPUT = "ACTION_CHANGE_ID_INPUT"
+export const ACTION_INIT_POST = "ACTION_INIT_POST"
+export const ACTION_CLICK_ON_POST = "ACTION_CLICK_ON_POST"
+export const ACTION_EDIT_POST = "ACTION_EDIT_POST"
+export const ACTION_FILTER_POST = "ACTION_FILTER_POST"
+export const ACTION_SORT_POST = "ACTION_SORT_POST"
