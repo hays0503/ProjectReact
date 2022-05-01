@@ -63,7 +63,6 @@ function App(props) {
         return (<ModalCreateWindows
             active={modalActiveCreator}
             setActive={setModalActiveCreator}
-            addPost={addPost}
         />)
     }
 
@@ -71,9 +70,6 @@ function App(props) {
         return <Modal
                 active={modalActiveEditor}
                 setActive={setModalActiveEditor}
-                editPost={editPost}
-                removePost={removePost}
-                clickOnPost123={clickOnPost123}
         />
     }
 
